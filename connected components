@@ -1,0 +1,57 @@
+class Solution {
+public:
+    long long countPairs(int n, vector<vector<int>>& edges) {
+        vector<vector<int>>store(n);
+        for(int i=0;i<edges.size();i++){
+            store[edges[i][0]].push_back(edges[i][1]);
+             store[edges[i][1]].push_back(edges[i][0]);
+        }
+        queue<int>unvis;
+        queue<int>vis;
+  int visi[n];
+        for(int i=0;i<n;i++){
+            visi[i]=0;
+        }
+        //visi[0]=0;
+     //   vis.push(0);
+        queue<int>q;
+        vector<unsigned long long>res;
+      for(int i=0;i<n;i++){
+          
+           if(visi[i]==0){
+               unsigned long long count=0;
+               
+                 q.push(i);
+              
+            while(!q.empty()){
+                int m=q.front();
+                 q.pop();
+                 count++;
+                
+                visi[m]=1;
+                for(int i=0;i<store[m].size();i++){
+                    if(visi[store[m][i]]==0){
+                        q.push(store[m][i]);
+                        visi[store[m][i]]=1;
+                       
+                    }
+                }
+               
+            }
+                res.push_back(count);
+      }
+         
+      }
+       unsigned long long ans=0;
+       vector<unsigned long long>o;
+        o.push_back(res[0]);
+        for(int i=1;i<res.size();i++){
+            int k=o[i-1]+res[i];
+            o.push_back(k);
+        }
+        for(int i=o.size()-1;i>0;i--){
+            ans=ans+res[i]*(o[i]-res[i]);
+        }
+        return ans;
+    }
+};

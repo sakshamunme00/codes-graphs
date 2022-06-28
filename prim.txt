@@ -1,0 +1,359 @@
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int findMinVertex(int* weights, bool* visited, int n){
+
+	int minVertex = -1;
+	for(int i = 0; i < n; i++){
+		if(!visited[i] && (minVertex == - 1 || weights[i] < weights[minVertex])){
+			minVertex = i;
+		}
+	}
+	return minVertex;
+}
+
+
+void prims(int** edges, int n){
+
+	int* parent = new int[n];
+	int* weights = new int[n];
+	bool* visited = new bool[n];
+
+	for(int i = 0; i < n; i++){
+		visited[i] = false;
+		weights[i] = INT_MAX;
+	}
+	parent[0] = -1;
+	weights[0] = 0;
+
+	for(int i = 0; i < n - 1; i++){
+		// Find Min Vertex
+		int minVertex = findMinVertex(weights, visited, n);
+		visited[minVertex] = true;
+		// Explore un visted neighbours
+		for(int j = 0; j < n; j++){
+			if(edges[minVertex][j] != 0 && !visited[j]){
+				if(edges[minVertex][j] < weights[j]){
+					weights[j] = edges[minVertex][j];
+					parent[j] = minVertex;
+				}
+			}
+		}
+	}
+
+	for(int i = 1; i < n; i++){
+		if(parent[i] < i){
+			cout << parent[i] < " << i << " " << weights[i] << endl;
+		}else{
+			cout << i << " " << parent[i] << " " << weights[i] << endl;
+		}
+	}
+}
+
+int main() {
+	int n;
+	int e;
+	cin >> n >> e;
+	int** edges = new int*[n];
+	for (int i = 0; i < n; i++) {
+		edges[i] = new int[n];
+		for (int j = 0; j < n; j++) {
+			edges[i][j] = 0;
+		}
+	}
+
+	for (int i = 0; i < e; i++) {
+		int f, s, weight;
+		cin >> f >> s >> weight;
+		edges[f][s] = weight;
+		edges[s][f] = weight;
+	}
+	cout << endl;
+	prims(edges, n);
+
+	for (int i = 0; i < n; i++) {
+		delete [] edges[i];
+	}
+	delete [] edges;
+}
+#include<iostream>
+#include<climits>
+using namespace std;
+
+
+int findMinVertex(int* distance, bool* visited, int n){
+
+	int minVertex = -1;
+	for(int i = 0; i < n; i++){
+		if(!visited[i] && (minVertex == -1 ||  distance[i] < distance[minVertex])){
+			minVertex = i;
+		}
+	}
+	return minVertex;
+}
+
+void dijkstra(int** edges, int n){
+	int* distance = new int[n];
+	bool* visited = new bool[n];
+
+	for(int i = 0; i < n; i++){
+		distance[i] = INT_MAX;
+		visited[i] = false;
+	}
+
+	distance[0] = 0;
+
+	for(int i = 0; i < n - 1; i++){
+		int minVertex = findMinVertex(distance, visited, n);
+		visited[minVertex] = true;
+		for(int j = 0; j < n; j++){	
+			if(edges[minVertex][j] != 0 && !visited[j]){
+				int dist = distance[minVertex] + edges[minVertex][j];
+				if(dist < distance[j]){
+					distance[j] = dist;
+				}
+			}
+		}
+	}
+
+	for(int i = 0; i < n; i++){
+		cout << i << " " << distance[i] << endl;
+	}
+	delete [] visited;
+	delete [] distance;
+	
+}
+
+int main() {
+	int n;
+	int e;
+	cin >> n >> e;
+	int** edges = new int*[n];
+	for (int i = 0; i < n; i++) {
+		edges[i] = new int[n];
+		for (int j = 0; j < n; j++) {
+			edges[i][j] = 0;
+		}
+	}
+
+	for (int i = 0; i < e; i++) {
+		int f, s, weight;
+		cin >> f >> s >> weight;
+		edges[f][s] = weight;
+		edges[s][f] = weight;
+	}
+	cout << endl;
+	dijkstra(edges, n);
+
+	for (int i = 0; i < n; i++) {
+		delete [] edges[i];
+	}
+	delete [] edges;
+}
+
+DIJKISTRA
+
+
+#include<iostream>
+#include<climits>
+using namespace std;
+
+
+int findMinVertex(int* distance, bool* visited, int n){
+
+	int minVertex = -1;
+	for(int i = 0; i < n; i++){
+		if(!visited[i] && (minVertex == -1 ||  distance[i] < distance[minVertex])){
+			minVertex = i;
+		}
+	}
+	return minVertex;
+}
+
+void dijkstra(int** edges, int n){
+	int* distance = new int[n];
+	bool* visited = new bool[n];
+
+	for(int i = 0; i < n; i++){
+		distance[i] = INT_MAX;
+		visited[i] = false;
+	}
+
+	distance[0] = 0;
+
+	for(int i = 0; i < n - 1; i++){
+		int minVertex = findMinVertex(distance, visited, n);
+		visited[minVertex] = true;
+		for(int j = 0; j < n; j++){	
+			if(edges[minVertex][j] != 0 && !visited[j]){
+				int dist = distance[minVertex] + edges[minVertex][j];
+				if(dist < distance[j]){
+					distance[j] = dist;
+				}
+			}
+		}
+	}
+
+	for(int i = 0; i < n; i++){
+		cout << i << " " << distance[i] << endl;
+	}
+	delete [] visited;
+	delete [] distance;
+	
+}
+
+int main() {
+	int n;
+	int e;
+	cin >> n >> e;
+	int** edges = new int*[n];
+	for (int i = 0; i < n; i++) {
+		edges[i] = new int[n];
+		for (int j = 0; j < n; j++) {
+			edges[i][j] = 0;
+		}
+	}
+
+	for (int i = 0; i < e; i++) {
+		int f, s, weight;
+		cin >> f >> s >> weight;
+		edges[f][s] = weight;
+		edges[s][f] = weight;
+	}
+	cout << endl;
+	dijkstra(edges, n);
+
+	for (int i = 0; i < n; i++) {
+		delete [] edges[i];
+	}
+	delete [] edges;
+}
+
+INSERT INTO `info2` (`S.NO`, `NAME`, `EMAIL`, `TEXT`) VALUES ('1', 'saksham', 'abcd@gmail.com', 'very good');
+#include <string>
+using namespace std;
+
+template <typename V>
+class MapNode {
+	public:
+		string key;
+		V value;
+		MapNode* next;
+
+		MapNode(string key, V value) {
+			this->key = key;
+			this->value = value;
+			next = NULL;
+		}
+
+		~MapNode() {
+			delete next;
+		}
+};
+
+template <typename V>
+class ourmap {
+	MapNode<V>** buckets;
+	int count;
+	int numBuckets;
+
+	public:
+	ourmap() {
+		count = 0;
+		numBuckets = 5;
+		buckets = new MapNode<V>*[numBuckets];
+		for (int i = 0; i < numBuckets; i++) {
+			buckets[i] = NULL;
+		}
+	}
+
+	~ourmap() {
+		for (int i = 0; i < numBuckets; i++) {
+			delete buckets[i];
+		}
+		delete [] buckets;
+	}
+
+	int size() {
+		return count;
+	}
+
+	V getValue(string key) {
+		
+	}
+
+	private:
+	int getBucketIndex(string key) {
+		int hashCode = 0;
+
+		int currentCoeff = 1;
+		for (int i = key.length() - 1; i >= 0; i--) {
+			hashCode += key[i] * currentCoeff;
+			hashCode = hashCode % numBuckets;
+			currentCoeff *= 37;
+			currentCoeff = currentCoeff % numBuckets;
+		}
+
+		return hashCode % numBuckets;
+	}
+
+	public:
+	void insert(string key, V value) {
+		int bucketIndex = getBucketIndex(string key);
+		MapNode<V>* head = buckets[bucketIndex];
+		while (head != NULL) {
+			if (head->key == key) {
+				head->value = value;
+				return;
+			}
+			head = head->next;
+		}
+		head = buckets[bucketIndex];
+		MapNode<V>* node = new MapNode<V>(key, value);
+		node->next = head;
+		buckets[bucketIndex] = node;
+		count++;
+	}
+
+};
+//binary search itretive
+  unsigned int endpoint=rides[i][1];
+          
+          unsigned int end1=rides.size()-1;
+            unsigned int start=i;
+            int pos=i+1;
+            while(start<=end1){
+                int mid=start+(end1-start)/2;
+                if(rides[mid][0]<endpoint){
+                    start=mid+1;
+                    continue;
+                }
+                pos=mid;
+                end1=mid-1;
+                a=1;
+            }
+        if(a==0){
+            dp[i]=max(maxi,cost);
+             maxi=max(maxi,dp[i]);
+        
+          continue; 
+        }
+            dp[i]=max(cost+dp[pos],maxi);
+            maxi=max(maxi,dp[i]);
+        }
+//iterate through map
+  map<int, string> demoMap = {{1, "Ant",},
+                                {2, "Elephant",},
+                                {3, "Lion",},
+                                {4, "Fox",},
+                                {5, "Zebra",},
+                                {6, "Bear",}};
+ 
+    auto iter = demoMap.begin();
+    while (iter != demoMap.end()) {
+        cout << "[" << iter->first << ","
+                    << iter->second << "]\n";
+        ++iter;
+    }
+

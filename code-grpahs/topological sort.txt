@@ -1,0 +1,93 @@
+//swim in rising water
+class Solution {
+public:
+       vector<int> DIR = {1, 0, -1, 0, 1};
+    int n, result = 0;
+    int swimInWater(vector<vector<int>>& grid) {
+        n = grid.size();
+        vector<vector<bool>> vis(n, vector<bool>(n));
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+        
+        pq.push({grid[0][0], {0, 0}});
+        while(!pq.empty()){
+            pair<int, pair<int, int>> A = pq.top();
+            pq.pop();
+            int cost = A.first, r = A.second.first, c = A.second.second;
+            result = max(result, cost);
+            if(r == n - 1 && c == n - 1) return result;
+            for(int k = 0; k < 4; k++){
+                int newR = r + DIR[k], newC = c + DIR[k + 1];
+                if(newR == n || newC == n || newC < 0 || newR < 0 || vis[newR][newC])
+                    continue;
+                vis[newR][newC] = 1;
+                pq.push({grid[newR][newC], {newR, newC}});
+            }
+        }
+        return result;
+    
+
+    }
+}; 
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+ 
+       int n=prerequisites.size();
+        vector<vector<int>>store(numCourses);
+        vector<int>indeg(numCourses,0);
+        for(int i=0;i<n;i++){
+            indeg[prerequisites[i][0]]++;
+            store[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }
+             queue<int>q;
+        for(int i=0;i<numCourses;i++){
+            if(indeg[i]==0){
+                q.push(i);
+            }
+        }
+        int k=0;
+       while(!q.empty()){
+           for(int i=0;i<store[q.front()].size();i++){
+               indeg[store[q.front()][i]]--;
+               if(indeg[store[q.front()][i]]==0){
+                   q.push(store[q.front()][i]);
+               }
+           }
+           q.pop();
+           k++;
+       }
+        if(k==numCourses){
+            return true;
+        }
+        return false;
+    }
+///
+ bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+ 
+       int n=prerequisites.size();
+        vector<vector<int>>store(numCourses);
+        vector<int>indeg(numCourses,0);
+        for(int i=0;i<n;i++){
+            indeg[prerequisites[i][0]]++;
+            store[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }
+             queue<int>q;
+        for(int i=0;i<numCourses;i++){
+            if(indeg[i]==0){
+                q.push(i);
+            }
+        }
+        int k=0;
+       while(!q.empty()){
+           for(int i=0;i<store[q.front()].size();i++){
+               indeg[store[q.front()][i]]--;
+               if(indeg[store[q.front()][i]]==0){
+                   q.push(store[q.front()][i]);
+               }
+           }
+           q.pop();
+           k++;
+       }
+        if(k==numCourses){
+            return true;
+        }
+        return false;
+    }

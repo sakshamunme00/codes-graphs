@@ -29,7 +29,7 @@ int main() {
 	}
 	
 	vector<int> tin(n, -1);
-	vector<int> low(n, -1); 
+	vector<int> low(n, -1); //minimum time to rech it,all components of a cluster will have same low time cause they will remain coonected if any edge is removed
 	vector<int> vis(n, 0); 
 	int timer = 0; 
 	for(int i = 0;i<n;i++) {

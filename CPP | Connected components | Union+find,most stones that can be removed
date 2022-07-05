@@ -1,0 +1,47 @@
+for the rows and the columns, lets consider a parent array, where row numbers are from 0 to 9999 and column numbers are after that : from 10000 to 20000
+Thus, we connect the nodes with same column or row.
+
+1,0 points 2,0 are connected to each other because they have same column. and now a new point 1,2 comes into play, this point will also be remotely connected to 2,0 through 1,0. If we want to delete maximum number of points in this case : that will be by doing
+2,0 then 1,2 (or 2,0 then 1,0 or 1,2 then 1,0 or 1,2 then 2,0)
+thus the number of nodes in this connected component are = 3
+and we delete 3-1 = 2 nodes -> which is the maximum value of nodes that can be deleted.
+
+so the total number of nodes that can be deleted will be :
+-> sum(number of nodes in each component - 1)
+-> sum(number of nodes in each component) - number of components
+-> number of total nodes - number of components
+
+// 947. Most Stones Removed with Same Row or Column
+class Solution {
+public:
+    
+    int finddsu(int x, vector<int>& parent){
+        if(parent[x]!=x)
+          parent[x]=finddsu(parent[x],parent);
+        return parent[x];
+    }
+    void uniondsu(int a, int b, vector<int>& parent, vector<int>& rank){
+        a = finddsu(a,parent);
+        b = finddsu(b,parent);
+        if(rank[a]<rank[b]){
+            uniondsu(b,a,parent,rank);
+            return;
+        }
+        if(rank[a]==rank[b]) rank[a]++;
+        parent[b] = a;
+    }
+    int removeStones(vector<vector<int>>& stones) {
+        int res=0;
+        int n = stones.size();
+        vector<int> parent(20001,0);
+        vector<int> rank(20001,0);
+        for(int i=0; i<parent.size(); i++) parent[i] = i;
+        for(auto s:stones) uniondsu(s[0],s[1]+10000,parent,rank);
+        set<int> components;
+        for(auto s:stones){
+            int p = finddsu(s[0],parent);
+            components.insert(p);
+        }
+        return n-components.size();
+    }
+};

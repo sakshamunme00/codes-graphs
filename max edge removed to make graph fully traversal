@@ -1,0 +1,200 @@
+//points which are already visited will get their extra edges removed
+//if remained
+//
+//
+class Solution {
+//     int findp(vector<int>parent,int x){
+//         if(parent[x]==-1){
+//             return parent[x]=x;
+//         }
+//         return parent[x]=findp(parent,parent[x]);
+//     }
+//     void merge(int u, int v, vector<int> &parent, vector<int> &rank){
+//     u = findParent(parent, u);
+//     v = findParent(parent, v);
+    
+//     if(rank[u] < rank[v]){
+//         parent[u] = v;
+//     }
+//     else if(rank[u] > rank[v]){
+//         parent[v] = u;
+//     }
+//     else{
+//         parent[v] = u;
+//         rank[u]++;
+//     }
+// }
+// public:
+   
+    
+//     int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
+//        // sort(edges.begin(),edges.end());
+//             vector<int> parent1(n+1, -1);
+//     vector<int> rank1(n+1, 0);
+//         vector<int>parentbob(100001,-1);
+//         vector<int>parentalice(100001,-1);
+//         int count1=0;
+//         int removed=0;
+//         int count2=0;
+//         for(int i=0;i<edges.size();i++){
+//             if(edges[i][0]==3){
+//                 if(count1>n-1 || count2>n-1){
+//                     removed++;
+//                     continue;
+//                 }
+//                int xx1= findp(parentbob,edges[i][1]);
+//                 int yy1= findp(parentbob,edges[i][2]);
+//                 if(xx1!=yy1){
+//                     count2+=1;
+//                     parentbob[xx1]=yy1;
+//                 }
+//                 else
+//                 {
+//                     removed++;
+//                 }
+//                   int xx2= findp(parentalice,edges[i][1]);
+//                 int yy2= findp(parentalice,edges[i][2]);
+//                    if(xx2!=yy2){
+//                     count1+=1;
+//                     parentalice[xx2]=yy2;
+//                 }
+//                 else{
+//                     removed++;
+//                 }
+                
+               
+//             }
+//             if(edges[i][0]==1){
+//                 if(count1>n-1 ){
+//                     removed++;
+//                     continue;
+//                 }
+//                  int xx1= findp(parentalice,edges[i][1]);
+//                 int yy1= findp(parentalice,edges[i][2]);
+//                 if(xx1!=yy1){
+//                     count1+=1;
+//                     parentalice[xx1]=yy1;
+//                 }
+//                 else
+//                     removed++;
+                
+//             }
+//             if(edges[i][0]==2){
+//                 if( count2>n-1){
+//                     removed++;
+//                     continue;
+//                 }
+//                    int xx1= findp(parentbob,edges[i][1]);
+//                 int yy1= findp(parentbob,edges[i][2]);
+//                 if(xx1!=yy1){
+//                     count2+=1;
+//                     parentbob[xx1]=yy1;
+//                 }
+//                 else
+//                     removed++;
+//             }
+//         }
+//         if(count1<n-1||count2<n-1){
+//             return -1;
+//         }
+//         return removed;
+//     }
+    int findParent(vector<int> &parent, int node){
+    if(parent[node] == -1){
+        return node;
+    }
+    
+    // Path compression
+    parent[node] = findParent(parent, parent[node]);
+    return parent[node];
+}
+
+void merge(int u, int v, vector<int> &parent, vector<int> &rank){
+    u = findParent(parent, u);
+    v = findParent(parent, v);
+    
+    if(rank[u] < rank[v]){
+        parent[u] = v;
+    }
+    else if(rank[u] > rank[v]){
+        parent[v] = u;
+    }
+    else{
+        parent[v] = u;
+        rank[u]++;
+    }
+}
+public:
+
+int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
+    vector<int> parent1(n+1, -1);
+    vector<int> rank1(n+1, 0);
+    
+    int totalType3 = 0, usedType3 = 0;
+    
+    // First, only travel those edges which can be used by both
+    for(auto i : edges){
+        if(i[0] != 3) continue;
+        
+        else{
+            totalType3++;
+            
+            int u = findParent(parent1, i[1]);
+            int v = findParent(parent1, i[2]);
+            
+            if(u != v){
+                usedType3++;
+                merge(u, v, parent1, rank1);
+            }
+        }
+    }
+    
+    int totalType1 = 0, usedType1 = 0;
+    int totalType2 = 0, usedType2 = 0;
+    
+    vector<int> parent2, rank2;
+    
+    // Till here, parent and rank arrays will be same for both types
+    parent2 = parent1;
+    rank2 = rank1;
+    
+    for(auto i : edges){
+        
+        if(i[0] == 1){
+            totalType1++;
+            
+            int u = findParent(parent1, i[1]);
+            int v = findParent(parent1, i[2]);
+            
+            if(u != v){
+                usedType1++;
+                merge(u, v, parent1, rank1);
+            }
+        }
+        
+        else if(i[0] == 2){
+            totalType2++;
+            
+            int u = findParent(parent2, i[1]);
+            int v = findParent(parent2, i[2]);
+            
+            if(u != v){
+                usedType2++;
+                merge(u, v, parent2, rank2);
+            }
+        }
+        
+    }
+    
+    if(usedType3 + usedType1 != n-1 || usedType3 + usedType2 != n-1){
+        return -1;
+    }
+    
+    int totalEdges = totalType1 + totalType2 + totalType3;
+    int totalUsed = usedType1 + usedType2 + usedType3;
+    
+    return totalEdges - totalUsed;
+}
+};
+
+// };

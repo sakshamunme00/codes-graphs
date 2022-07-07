@@ -1,0 +1,61 @@
+// ex  '' /
+//     / ''
+//connect all boundary points all are from range 0,(n+1)*(n+1)-1, then join by slashes.
+//
+//
+int cnt;
+vector<int> par(1000),R(1000);
+class Solution {
+public:
+    int find(int x){
+        return (x==par[x]?x:find(par[x]));
+    }
+    void merge(int x,int y){
+        x=find(x);y=find(y);
+        if(x==y){
+            cnt++;
+        }
+        else{
+            if(R[x]>=R[y]){
+                par[y]=x;
+                R[x]+=1;
+            }
+            else{
+                par[x]=y;
+            }
+        }
+    }
+    int regionsBySlashes(vector<string>& grid) {
+        int n=grid.size();
+        int m=n+1;
+        cnt=1;
+        for(int i=0;i<m*m;i++){
+            par[i]=i;
+            R[i]=1;
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<m;j++){
+                if(i==0 || j==0 || i==m-1 || j==m-1){
+                    int cellno=i*m+j;
+                    if(cellno!=0) merge(0,cellno);
+                }
+            }
+        }
+        for(int i=0;i<n;i++){
+            string s=grid[i];
+            for(int j=0;j<s.length();j++){
+                if(s[j]=='/'){
+                    int cellno1=i*m+j+1;
+                    int cellno2=(i+1)*m+j;
+                    merge(cellno1,cellno2);
+                }
+                else if(s[j]=='\\'){
+                    int cellno1=i*m+j;
+                    int cellno2=(i+1)*m+j+1;
+                    merge(cellno1,cellno2);
+                }
+            }
+        }
+        return cnt;
+    }
+};

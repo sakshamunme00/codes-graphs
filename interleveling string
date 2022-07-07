@@ -1,0 +1,43 @@
+class Solution {
+public:
+    unordered_map<string,bool>mem;
+    bool check(int len1,int len2,int len3,int p1,int p2,int p3,string s1,string s2,string s3){
+        if(p3==len3){
+            if(p1==len1&&p2==len2){
+                return true;
+            }
+            return false;
+        }
+        string key=to_string(p1)+"*"+to_string(p2)+"*"+to_string(p3);
+        if(mem.find(key)!=mem.end()){
+            return mem[key];
+        }
+        if(p1==len1){
+            if(s2[p2]!=s3[p3]){
+                return false;
+            }
+          return check(len1,len2,len3,p1,p2+1,p3+1,s1,s2,s3);
+        }
+           if(p2==len2){
+            if(s1[p1]!=s3[p3]){
+                return false;
+            }
+          return check(len1,len2,len3,p1+1,p2,p3+1,s1,s2,s3);
+        }
+        bool a=false;
+        bool b=false;
+        if(s1[p1]==s3[p3]){
+              a=check(len1,len2,len3,p1+1,p2,p3+1,s1,s2,s3);
+        }
+         if(s2[p2]==s3[p3]){
+              b=check(len1,len2,len3,p1,p2+1,p3+1,s1,s2,s3);
+        }
+        return mem[key]=a or b;
+    }
+    bool isInterleave(string s1, string s2, string s3) {
+        int len1=s1.length();
+        int len2=s2.length();
+        int len3=s3.length();
+        return check(len1,len2,len3,0,0,0,s1,s2,s3);
+    }
+};

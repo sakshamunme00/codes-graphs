@@ -1,0 +1,33 @@
+at every level give marking to nodes starting from 0, then calculate highest marking -lowest marking +1
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        queue<pair<TreeNode*,long long>>q;
+        q.push({root,0});
+        int k=q.size();
+        long long ans=0;
+        while(!q.empty()){
+           int m=k;
+            long long cur=0;
+        while(!q.empty()&&k!=0){
+            if(m==k){
+                cur=q.front().second;
+            }
+            ans=max(ans,q.front().second-cur+1);
+            if(q.front().first->left!=NULL){
+                q.push({q.front().first->left,2*(q.front().second-cur)+1});
+                
+            }
+              if(q.front().first->right!=NULL){
+                q.push({q.front().first->right,2*(q.front().second-cur)+2});
+                   
+            }
+            q.pop();
+            k--;
+        }
+            k=q.size();
+         
+    }
+        return ans;
+    }
+};

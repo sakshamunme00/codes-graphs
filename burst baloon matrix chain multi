@@ -1,0 +1,27 @@
+  int dp[502][502];
+    
+    int dfs(vector<int>& nums, int left, int right){
+        if(left>right) return 0;
+        if(dp[left][right] > 0) return dp[left][right];
+        
+        int result = 0, current, remaining;
+        for(int i=left; i<=right; ++i){
+            current = nums[left-1] * nums[i] * nums[right+1];
+            remaining = dfs(nums, left, i-1) + dfs(nums, i+1, right);
+            result = max(result, current + remaining);
+        }
+        
+        return dp[left][right] = result;
+    }
+    
+public:
+    int maxCoins(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 1) return nums[0];
+        
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+        n += 2;
+        
+        return dfs(nums, 1, n-2);
+    }

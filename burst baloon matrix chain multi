@@ -6,7 +6,8 @@
         
         int result = 0, current, remaining;
         for(int i=left; i<=right; ++i){
-            current = nums[left-1] * nums[i] * nums[right+1];
+            current = nums[left-1] * nums[i] * nums[right+1];(here we appraoch in reverse order here nums[i] is the last balloon that will be bursted in this range
+            and hence its neigbours will be start-1 and end+1.)
             remaining = dfs(nums, left, i-1) + dfs(nums, i+1, right);
             result = max(result, current + remaining);
         }

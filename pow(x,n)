@@ -1,0 +1,38 @@
+class Solution {
+public:
+    //when power is even convert x yo x*x and reduce power by half
+    double myPow(double x, int n) {
+        double xoriginal=x;
+        double ans=1.0;
+        if(n==0) return 1;
+        int n1=n,k=0;
+        if(n==-2147483648){       // important edge case // iss number ki jagaah INT_MIN bhi likh skte hain
+            k=1;
+            n++;
+        }
+        if(n<0) n=n*-1;
+        
+ 
+        if(n%2==0){
+            x=x*x;
+            n=n/2;
+            
+            ans=myPow(x,n);
+        }
+        else{
+            n=n-1;
+            
+            ans=x*myPow(x,n);
+        }
+        if(k==1) ans=ans*xoriginal;
+        
+        if(n1<0) {
+            double p=1.0;
+            p=p/ans;
+            return p;
+        }
+        
+        return ans;
+        
+    }
+};

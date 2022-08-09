@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+    /* we can use prefix appraoch store max height of left and stor emax height of right ;
+    and can say maxwater at index i=min(maxleft,maxright)-height[i]   
+        sapce-optimised way can be use left and right pointers and keeptrack of left max and right max
+        move any one of pointer when the value at that pointer is less than equal to value at another pointer
+        
+        */
+        int n=height.size();
+        int l=0;
+        int r=n-1;
+        int lmax=height[0];
+        int rmax=height[n-1];
+        int ans=0;
+        while(l<r){
+            if(height[l]<=height[r]){
+                if(height[l]>=lmax){
+                   
+                    lmax=height[l];
+                }
+                else{
+                    ans+=(lmax-height[l]);
+                }
+                l++;
+            }
+            else{
+                if(height[r]>=rmax){
+                    rmax=height[r];
+                }
+                else{
+                     ans+=(rmax-height[r]);
+                }
+                r--;
+            }
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,56 @@
+class Solution {
+public:
+    bool ispossible(vector<int>&weights,int mid,int days){
+        int ans=0;
+        int s=0;
+        
+     int i=0;
+        while(i<weights.size()){
+            s+=weights[i];
+            if(s>mid){
+                ans++;
+                s=0;
+                continue;
+            }
+            
+            i++;
+        }
+        ans++;
+        if(ans>days){
+            return false;
+        }
+        return true;
+    }
+    int shipWithinDays(vector<int>& weights, int days) {
+        int sum=0;
+        int ans=0;
+        int ans1;
+        for(auto x:weights){
+            sum+=x;
+            ans=max(ans,x);
+        }
+        int start=ans;
+        int end=sum;
+        /*we are taking greates elemnt present in weights as the lowest possible capacity required,to ship only one element on one day;
+        and sum of all weights as the upper limit that we can use to ship all weights in single day.
+        we taek mid of both limits and check wether the container of capacity mid can be used to deliver goods within given days limit.if the days taken by mid are less than given then we can say that there is chance that we can lower the container capacity so that we can deliever in days nearest to given limit.If time taken is more then we need to increase our capacity*/
+      while(start<=end){
+          int mid;
+          if((start+end)%2==0){
+              mid=(start+end)/2;
+              
+          }
+          else{
+              mid=(start+end)/2+1;
+          }
+          if(ispossible(weights,mid,days)){
+              ans1=mid;
+              end=mid-1;
+          }
+          else{
+              start=mid+1;
+          }
+      }
+        return ans1;
+    }
+};

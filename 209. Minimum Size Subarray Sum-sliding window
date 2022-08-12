@@ -1,0 +1,72 @@
+class Solution {
+public:
+    int helper(vector<int>&nums,int start,int end){
+        if(start==end){
+            return start+1;
+                    }
+        if(end-start==1){
+           return min(2,start+1);
+        }
+        int mid=start+(end-start)/2;
+        return min(mid+1,min(helper(nums,start,mid),helper(nums,mid,end)));
+    }
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int n=nums.size();
+        vector<int>store(nums.size());
+        int s=0;
+        for(int i=0;i<n;i++){
+            s+=nums[i];
+            store[i]=s;
+        }
+      
+        int start=0;
+        int end=n-1;
+if(store[0]>=target){
+    return 1;
+}
+        if(store.size()==2&&store[n-1]>=target){
+         return 2;   
+        }
+        if(store[n-1]<target){
+            return 0;
+        }
+       int i=0;
+        int minind=-1;
+      int j=1;
+        bool check=false;
+        int ans=INT_MAX;
+     while(minind<j){
+        if(store[j]-i<target){
+            if(j==n-1){
+                break;
+            }
+            else {
+                 j++;
+             }
+            continue;
+        }
+         else{
+             if(minind==-1){
+                 ans=j+1;
+             }
+             else 
+               ans=min(ans,j-minind);
+             
+             minind++;
+             i=store[minind];
+             
+         }
+     }
+        return ans;
+    }
+};
+/*
+here we will use variable size sliding window,
+in variable size sliding window we use multiple pointers,here we have used 
+two pointers.
+we create prefix sum array.
+we place pointer i,j
+when subarray between i&j is >=target
+we increase  i
+else we increase j
+*/

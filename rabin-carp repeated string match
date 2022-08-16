@@ -1,0 +1,56 @@
+int mod = 10000007;
+int rabin_karp(string src, string target){
+    int n = target.size();
+    int power = 1;
+    for(int i=0;i<n;i++){
+        power = (power*29)%mod;
+    }
+    
+    int targetCode = 0;
+    for(int i=0;i<n;i++){
+        targetCode = (targetCode*29+target[i])%mod;
+    }      
+    int hashCode = 0;
+    for(int i=0;i<src.size();i++){
+        hashCode = (hashCode*29 + src[i])%mod;
+        if(i<n-1){
+            continue;
+        }
+        if(i>=n){
+            hashCode = (hashCode-src[i-n]*power)%mod;
+        }
+        if(hashCode<0){
+            hashCode+=mod;
+        }
+        if(hashCode == targetCode){
+            if(src.substr(i-n+1,n) == target){
+                return i-n+1;
+            }
+        }
+    }
+    return -1;        
+}
+int repeatedStringMatch(string a, string b) {
+    
+    if(a == b){
+        return 1;
+    }
+    
+    int cnt = 1;
+    string scr = a;
+    while(scr.size() < b.size()){
+        cnt++;
+        scr += a;
+    }
+    
+    if(scr == b){
+        return cnt;
+    }
+    if(rabin_karp(scr,b) != -1){
+        return cnt;
+    }
+    if(rabin_karp(scr+a,b) != -1){
+        return cnt+1;
+    }
+    return -1;
+}

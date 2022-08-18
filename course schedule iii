@@ -1,0 +1,35 @@
+class Solution {
+public:
+/*sort on basis of deadline
+create time till if duration +timetill<=deadline then push in priority_queue
+otherwise take out q.top only if its value is less than duration of current iterator course
+*/
+    int scheduleCourse(vector<vector<int>>& courses) {
+        for(int i=0;i<courses.size();i++){
+            int t=courses[i][0];
+            courses[i][0]=courses[i][1];
+            courses[i][1]=t;
+        }
+       sort(courses.begin(),courses.end());
+        priority_queue<int>q;
+        int timetill=0;
+        int ans=0;
+        for(int i=0;i<courses.size();i++){
+            if(timetill+courses[i][1]<=courses[i][0]){
+                timetill+=courses[i][1];
+                q.push(courses[i][1]);
+                ans++;
+            }
+            else{
+                if(!q.empty()&&q.top()>courses[i][1]){
+                 int t=q.top();
+                    q.pop();
+                    q.push(courses[i][1]);
+                    timetill+=(courses[i][1]-t);
+                }
+                
+            }
+        }
+        return ans;
+    }
+};

@@ -54,3 +54,28 @@ public:
         return false;
     }
 };
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        unordered_map<int, int> freq, need;
+        for(auto item: nums)
+            freq[item]++;
+        for(auto item: nums) {
+            if(freq[item] == 0) {
+                continue;
+            }
+            if(need.count(item) && need[item] > 0) {
+                need[item]--;
+                freq[item]--;
+                need[item + 1]++;
+            } else if(freq[item] && freq[item + 1] && freq[item + 2]) {
+                freq[item]--;
+                freq[item + 1]--;
+                freq[item + 2]--;
+                need[item + 3]++;
+            } else 
+                return false;
+        }
+        return true;
+    }
+};

@@ -1,0 +1,56 @@
+/*we make a map of in ,priority_queue,
+where key=endpoint;
+and values in the queue are the size of subsequences that end with the key
+we will take the shortest size evry time and then pop it and insert the updated end with updated size.
+*/
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+            vector<int>vis(nums.size(),0);
+      unordered_map<int,int>id;
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>q;
+        
+        unordered_map<int,priority_queue<int,vector<int>,greater<int>>>store;
+        store[nums[0]].push(1);
+        for(int i=1;i<nums.size();i++){
+              if(id[nums[i]]==0){
+                    if(store.count(nums[i]-1)!=0&&store[nums[i]-1].size()!=0){
+                        int x=store[nums[i]-1].top();
+                        store[nums[i]].push(x+1);
+                        store[nums[i]-1].pop();
+                        
+                    }
+                  else{
+                      store[nums[i]].push(1);
+                  }
+                  id[nums[i]]++;
+              }
+            else{
+                   if(store[nums[i]-1].size()==0){
+                       store[nums[i]].push(1);
+                   }
+                else{
+                    int x=store[nums[i]-1].top();
+                    store[nums[i]].push(x+1);
+                    store[nums[i]-1].pop();
+                }
+             }
+         }    
+        int sum=0;
+        for(auto x:store){
+            if(x.second.size()!=0){
+                while(!x.second.empty()){
+                    if(x.second.top()<3){
+                        return false;
+                    }
+                    sum+=x.second.top();
+                    x.second.pop();
+                }
+            }
+        }
+        if(sum==nums.size()){
+            return true;
+        }
+        return false;
+    }
+};

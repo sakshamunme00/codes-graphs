@@ -1,0 +1,61 @@
+class Solution {
+public:
+    bool check(int mid,vector<int>&nums,int k){
+          int l=0;//slow pointer
+        int r=1;//fast pointer
+        int ans=0;
+        while(r<nums.size()){
+            if(nums[r]-nums[l]<=mid){
+                if(r<nums.size()-1){
+                       ans++;
+                     ans+=(r-l-1);//in between elements will aslo have diff less than mid as they will form pairs with nums[r]
+                       r++;
+                      continue;
+                }
+                else{
+                    ans++;
+                     ans+=(r-l-1);
+                       break;
+                }
+            }
+            else{
+                while(l<r&&nums[r]-nums[l]>mid){
+                      l++;
+                
+                }
+                if(l==r){
+                    if(r==nums.size()-1){
+                        break;
+                    }
+                    r++;
+                    continue;
+                }
+                
+            }
+            
+        }
+        if(ans>=k){
+            return true;
+        }
+        return false;
+    }
+    int smallestDistancePair(vector<int>& nums, int k) {
+        sort(nums.begin(),nums.end());
+        int e=nums[nums.size()-1]-nums[0];
+         int s=INT_MAX;
+        int ans=0;
+        for(int i=1;i<nums.size();i++){
+            s=min(s,nums[i]-nums[i-1]);
+        }
+        while(s<=e){
+            int mid=s+(e-s)/2;
+            if(check(mid,nums,k)){
+                ans=mid;
+e=mid-1;}
+            else{
+                s=mid+1;
+            }
+        }
+        return ans;
+    }
+};

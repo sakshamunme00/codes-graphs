@@ -1,0 +1,49 @@
+Algorithm
+
+Find first (L) and last occurrences(R) where ascending rule breaks.
+Eg: 2 6 4 1 8 10 7 9. Iterate from left and find L such that nums[L + 1] < nums[L]. Start from right and find R such that nums[R -1] > nums[R].
+L = 1 and R = 6.
+Find minVal and maxVal within L to R.
+while nums[L - 1] > minVal we have to shift L pointer to left so that after sorting subarray array is sorted.
+while nums[R + 1] < maxVal we have to shift R pointer to right so that after sorting subarray array is sorted.
+L and R are ends of result subarray.
+class Solution {
+    public int findUnsortedSubarray(int[] nums) {
+        
+        int N = nums.length;
+        
+        int L = 0;
+        
+        while(L < N - 1 && nums[L + 1] >= nums[L]){
+            L++;
+        }
+        
+        if(L == N - 1) return 0;
+        
+        int R = N - 1;
+        
+        while( R > 0 && nums[R - 1] <= nums[R]){
+            R--;
+        }
+        
+        //Find Max and Min
+        
+        int maxVal = Integer.MIN_VALUE;
+        int minVal = Integer.MAX_VALUE;
+        
+        for(int i = L; i <= R; i++){
+            maxVal = Math.max(nums[i], maxVal);
+            minVal = Math.min(nums[i], minVal);
+        }
+        
+        while( L > 0 && nums[L - 1] > minVal){
+            L--;
+        }
+        
+        while(R < N - 1 && nums[R + 1] < maxVal){
+            R++;
+        }
+        
+        return R - L + 1;
+    }
+}
